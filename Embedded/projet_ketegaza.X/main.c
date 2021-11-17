@@ -33,6 +33,7 @@ LED_ORANGE = 1 ;
  
 InitTimer23(); 
 InitTimer1();
+
 // Boucle Principale
 
 while ( 1 ) {
