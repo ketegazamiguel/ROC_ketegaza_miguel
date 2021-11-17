@@ -22,8 +22,8 @@ InitOscillator ( ) ;
 
 // moteur 
 InitPWM ( );
-PWMSetSpeed (0,MOTEUR_GAUCHE);
-PWMSetSpeed (0,MOTEUR_DROITE);
+//PWMSetSpeedConsigne(0,MOTEUR_GAUCHE);
+//PWMSetSpeedConsigne (150,MOTEUR_DROITE);
 ///////
 
 InitIO ( ) ;
