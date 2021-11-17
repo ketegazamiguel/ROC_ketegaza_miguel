@@ -37,14 +37,14 @@ IFS0bits.T3IF = 0; // Clear Timer3 Interrupt Flag
 //LED_ORANGE = !LED_ORANGE;
 if(toggle == 0)
 {
-PWMSetSpeedConsigne(20,MOTEUR_DROITE) ;
-PWMSetSpeedConsigne(20, MOTEUR_GAUCHE) ;
+PWMSetSpeedConsigne(0,MOTEUR_DROITE) ;
+PWMSetSpeedConsigne(0, MOTEUR_GAUCHE) ;
 toggle = 1 ;
 }
 else
 {
-PWMSetSpeedConsigne(-20,MOTEUR_DROITE) ;
-PWMSetSpeedConsigne(-20,MOTEUR_GAUCHE) ;
+PWMSetSpeedConsigne(0,MOTEUR_DROITE) ;
+PWMSetSpeedConsigne(0,MOTEUR_GAUCHE) ;
 toggle =0;
 }
 }

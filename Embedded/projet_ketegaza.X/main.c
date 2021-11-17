@@ -35,7 +35,7 @@ InitTimer23();
 InitTimer1();
 
 // Boucle Principale
-
+InitADC1();
 while ( 1 ) {
     //
 } 
