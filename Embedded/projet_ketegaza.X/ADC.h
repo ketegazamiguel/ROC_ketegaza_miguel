@@ -17,6 +17,7 @@ void ADC1StartConversionSequence();
 void ADCClearConversionFinishedFlag(void);
 unsigned int * ADCGetResult(void);
 unsigned char ADCIsConversionFinished(void);
+
 #ifdef	__cplusplus
 }
 #endif
