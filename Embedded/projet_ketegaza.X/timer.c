@@ -8,6 +8,7 @@
 //Initialisation d?un timer 32 bits
 
 void InitTimer23(void) {
+
     T3CONbits.TON = 0; // Stop any 16-bit Timer3 operation
     T2CONbits.TON = 0; // Stop any 16/32-bit Timer3 operation
     T2CONbits.T32 = 1; // Enable 32-bit Timer mode
