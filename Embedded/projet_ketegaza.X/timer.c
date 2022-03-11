@@ -3,7 +3,7 @@
 #include  "IO.h"
 #include  "PWM.h"
 #include  "ADC.h"
-
+#include "main.h"
 
 //Initialisation d?un timer 32 bits
 
@@ -50,23 +50,24 @@ void __attribute__((interrupt, no_auto_psv)) _T3Interrupt(void) {
     }
 }
 
-//Initialisation d?un timer 16 bits
+//Initialisation d?un tier 16 bits
 
 void InitTimer1(void) {
 
     //Timer1 pour horodater les mesures (1ms)
     T1CONbits.TON = 0; // Disable Timer
-    T1CONbits.TCKPS = 0b11; //Prescaler
+    //T1CONbits.TCKPS = 0b11; //Prescaler
     //11 = 1:256 prescale value
     //10 = 1:64 prescale value
     //01 = 1:8 prescale value
     //00 = 1:1 prescale value
-    T1CONbits.TCS = 0; //clock source = internal clock
-    PR1 = 1250;
+    //T1CONbits.TCS = 0; //clock source = internal clock
+   //PR1 = 1250;
 
     IFS0bits.T1IF = 0; // Clear Timer Interrupt Flag
     IEC0bits.T1IE = 1; // Enable Timer interrupt
     T1CONbits.TON = 1; // Enable Timer
+    SetFreqTimer1(22);
 }
 
 //Interruption du timer 1
@@ -76,5 +77,37 @@ void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     //LED_BLANCHE = !LED_BLANCHE;
     PWMUpdateSpeed();
     ADC1StartConversionSequence();
+    if (FCY > 2.5) {
+        _TRISG7 = 1;
+        __delay_ms(1000);
+        _TRISG7 = 0;
+        __delay_ms(1000);
+    } else if (FCY < 2.5) {
+        _TRISG7 = 1;
+        //__delay_ms(1000);
+        _TRISG7 = 0;
 
+    } else
+        _TRISG7 = 1;
+    //  __delay_ms(2000);
+    _TRISG7 = 0;
+    
+}
+
+
+void SetFreqTimer1(float freq) {
+    T1CONbits.TCKPS = 0b00; //00 = 1:1 prescaler value
+    if (FCY / freq > 65535) {
+        T1CONbits.TCKPS = 0b01; //01 = 1:8 prescaler value
+        if (FCY / freq / 8 > 65535) {
+            T1CONbits.TCKPS = 0b10; //10 = 1:64 prescaler value
+            if (FCY / freq / 64 > 65535) {
+                T1CONbits.TCKPS = 0b11; //11 = 1:256 prescaler value
+                PR1 = (int) (FCY / freq / 256);
+            } else
+                PR1 = (int) (FCY / freq / 64);
+        } else
+            PR1 = (int) (FCY / freq / 8);
+    } else
+        PR1 = (int) (FCY / freq);
 }
