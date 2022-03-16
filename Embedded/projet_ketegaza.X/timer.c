@@ -6,7 +6,7 @@
 #include "main.h"
 
 //Initialisation d?un timer 32 bits
-
+unsigned long timestamp=0; 
 void InitTimer23(void) {
 
     T3CONbits.TON = 0; // Stop any 16-bit Timer3 operation
@@ -29,6 +29,9 @@ void InitTimer23(void) {
     IPC2bits.T3IP = 0x01; // Set Timer3 Interrupt Priority Level
     IFS0bits.T3IF = 0; // Clear Timer3 Interrupt Flag
     IEC0bits.T3IE = 1; // Enable Timer3 interrupt
+   
+   
+    
     T2CONbits.TON = 1; // Start 32-bit Timer
     /* Example code for Timer3 ISR */
 
@@ -39,15 +42,15 @@ unsigned char toggle = 0;
 void __attribute__((interrupt, no_auto_psv)) _T3Interrupt(void) {
     IFS0bits.T3IF = 0; // Clear Timer3 Interrupt Flag
     //LED_ORANGE = !LED_ORANGE;
-    if (toggle == 0) {
-        PWMSetSpeedConsigne(0, MOTEUR_DROITE);
-        PWMSetSpeedConsigne(0, MOTEUR_GAUCHE);
-        toggle = 1;
-    } else {
-        PWMSetSpeedConsigne(0, MOTEUR_DROITE);
-        PWMSetSpeedConsigne(0, MOTEUR_GAUCHE);
-        toggle = 0;
-    }
+//    if (toggle == 0) {
+//        PWMSetSpeedConsigne(0, MOTEUR_DROITE);
+//        PWMSetSpeedConsigne(0, MOTEUR_GAUCHE);
+//        toggle = 1;
+//    } else {
+//        PWMSetSpeedConsigne(0, MOTEUR_DROITE);
+//        PWMSetSpeedConsigne(0, MOTEUR_GAUCHE);
+//        toggle = 0;
+//    }
 }
 
 //Initialisation d?un tier 16 bits
@@ -67,7 +70,7 @@ void InitTimer1(void) {
     IFS0bits.T1IF = 0; // Clear Timer Interrupt Flag
     IEC0bits.T1IE = 1; // Enable Timer interrupt
     T1CONbits.TON = 1; // Enable Timer
-    SetFreqTimer1(22);
+    SetFreqTimer1(150);
 }
 
 //Interruption du timer 1
@@ -77,21 +80,9 @@ void __attribute__((interrupt, no_auto_psv)) _T1Interrupt(void) {
     //LED_BLANCHE = !LED_BLANCHE;
     PWMUpdateSpeed();
     ADC1StartConversionSequence();
-    if (FCY > 2.5) {
-        _TRISG7 = 1;
-        __delay_ms(1000);
-        _TRISG7 = 0;
-        __delay_ms(1000);
-    } else if (FCY < 2.5) {
-        _TRISG7 = 1;
-        //__delay_ms(1000);
-        _TRISG7 = 0;
-
-    } else
-        _TRISG7 = 1;
-    //  __delay_ms(2000);
-    _TRISG7 = 0;
     
+    
+    //LED_BLEUE= !LED_BLEUE;
 }
 
 
@@ -111,3 +102,40 @@ void SetFreqTimer1(float freq) {
     } else
         PR1 = (int) (FCY / freq);
 }
+//timer 4
+void InitTimer4(void) {
+
+    T4CONbits.TON = 0; // Disable Timer
+
+    IFS1bits.T4IF = 0; // Clear Timer Interrupt Flag
+    IEC1bits.T4IE = 1; // Enable Timer interrupt
+    T4CONbits.TON = 1; // Enable Timer
+    SetFreqTimer4(1000);
+    
+    
+}
+void SetFreqTimer4(float freq) {
+    T4CONbits.TCKPS = 0b00; //00 = 1:1 prescaler value
+    if (FCY / freq > 65535) {
+        T4CONbits.TCKPS = 0b01; //01 = 1:8 prescaler value
+        if (FCY / freq / 8 > 65535) {
+            T4CONbits.TCKPS = 0b10; //10 = 1:64 prescaler value
+            if (FCY / freq / 64 > 65535) {
+                T4CONbits.TCKPS = 0b11; //11 = 1:256 prescaler value
+                PR4 = (int) (FCY / freq / 256);
+            } else
+                PR4 = (int) (FCY / freq / 64);
+        } else
+            PR4 = (int) (FCY / freq / 8);
+    } else
+        PR4 = (int) (FCY / freq);
+}
+
+
+void __attribute__((interrupt, no_auto_psv)) _T4Interrupt(void) {
+    IFS1bits.T4IF = 0;
+    
+    timestamp=timestamp+1;
+    OperatingSystemLoop();
+}
+

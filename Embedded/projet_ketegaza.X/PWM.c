@@ -122,7 +122,7 @@ if (nbMotor == MOTEUR_GAUCHE)
 else if(nbMotor == MOTEUR_DROITE)
  {
 //
-robotState.vitesseDroiteConsigne = vitesseEnPourcents;
+robotState.vitesseDroiteConsigne = -vitesseEnPourcents;
 
 }}
 
