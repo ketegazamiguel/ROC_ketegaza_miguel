@@ -14,6 +14,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using System.Windows.Threading;
 
 namespace RobotInterface
 {
@@ -22,26 +23,54 @@ namespace RobotInterface
     /// </summary>
     public partial class MainWindow : Window
     {
-        ReliableSerialPort serialPort1; 
-        
+        ReliableSerialPort serialPort1;
+        DispatcherTimer timerAffichage;
 
         public MainWindow()
         {
             InitializeComponent();
             textBoxEmission.Text = "Bonjour";
             serialPort1 = new ReliableSerialPort("COM6", 115200, Parity.None, 8, StopBits.One);
+            serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
+            /// timer 
+            timerAffichage = new DispatcherTimer();
+            timerAffichage.Interval = new TimeSpan(0, 0, 0, 0, 100);
+            timerAffichage.Tick += TimerAffichage_Tick; 
+            timerAffichage.Start();
+            
 
 
 
         }
 
-        void envoyer() {
+        private void TimerAffichage_Tick(object sender, EventArgs e)
+        {
+            if(receivedText != "")
+            {
+                textBoxReception.Text += receivedText;
+                receivedText = "";
+            }
+        }
 
-            textBoxReception.Text = textBoxReception.Text + "reçu: "+textBoxEmission.Text + "\n";
+        string receivedText;
+
+
+
+        private void SerialPort1_DataReceived(object sender, DataReceivedArgs e)
+        {
+            //throw new NotImplementedException();
+            receivedText += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
+            
+        }
+
+        
+
+        void envoyer()
+        {
+            serialPort1.Write(textBoxEmission.Text);            
             textBoxEmission.Clear();
-
-                }
+        }
 
         private void buttonEnvoyer_Click(object sender, RoutedEventArgs e)
         {
@@ -66,6 +95,11 @@ namespace RobotInterface
 {
                 envoyer();
             }
+        }
+
+        private void buttonClear_Click(object sender, RoutedEventArgs e)
+        {
+            textBoxReception.Clear();
         }
     }
 }

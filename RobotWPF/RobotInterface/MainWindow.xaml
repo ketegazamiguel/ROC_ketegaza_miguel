@@ -23,9 +23,11 @@
             <TextBox x:Name="textBoxReception" HorizontalAlignment="Stretch" TextWrapping="Wrap" Text="" VerticalAlignment="Stretch" IsReadOnly="True"/>
         </GroupBox>
         <Button x:Name="buttonEnvoyer" Content="Envoyer"  Height="30" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Grid.Row="3" Width="100" Click="buttonEnvoyer_Click"  Background="SkyBlue">
-           
-            
+
+
         </Button>
+        <Button x:Name="buttonClear" Content="Clear" Grid.Column="1" HorizontalAlignment="Left" Margin="154,5,0,0" Grid.Row="2" VerticalAlignment="Top" Height="30" Width="100" Background="#FF2FFFBD" Click="buttonClear_Click"/>
+
 
     </Grid>
 </Window>
