@@ -15,6 +15,7 @@
 #include "PWM.h" 
 #include "ADC.h" 
 #include "main.h"
+#include "UART.h"
 
 int main(void) {
 
@@ -23,6 +24,9 @@ int main(void) {
     InitIO();
 
     // Configuration des éntrées sorties
+    
+    //Initialisation de UART
+    InitUART();
 
     // moteur 
     InitPWM();

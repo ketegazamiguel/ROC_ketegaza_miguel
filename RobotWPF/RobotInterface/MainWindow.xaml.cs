@@ -26,19 +26,21 @@ namespace RobotInterface
         ReliableSerialPort serialPort1;
         DispatcherTimer timerAffichage;
 
+        Robot robot = new Robot();
+
         public MainWindow()
         {
             InitializeComponent();
-            textBoxEmission.Text = "Bonjour";
+            // textBoxEmission.Text = "Bonjour";
             serialPort1 = new ReliableSerialPort("COM6", 115200, Parity.None, 8, StopBits.One);
             serialPort1.DataReceived += SerialPort1_DataReceived;
             serialPort1.Open();
             /// timer 
             timerAffichage = new DispatcherTimer();
             timerAffichage.Interval = new TimeSpan(0, 0, 0, 0, 100);
-            timerAffichage.Tick += TimerAffichage_Tick; 
+            timerAffichage.Tick += TimerAffichage_Tick;
             timerAffichage.Start();
-            
+
 
 
 
@@ -46,53 +48,58 @@ namespace RobotInterface
 
         private void TimerAffichage_Tick(object sender, EventArgs e)
         {
-            if(receivedText != "")
+            while(robot.byteListReceived.Count>0)            
             {
-                textBoxReception.Text += receivedText;
-                receivedText = "";
+                //textBoxReception.Text += receivedText;
+                //receivedText = "";
+                textBoxReception.Text += " 0x" + robot.byteListReceived.Dequeue().ToString("X2");
+               
             }
         }
-
-        string receivedText;
-
-
+                
 
         private void SerialPort1_DataReceived(object sender, DataReceivedArgs e)
         {
             //throw new NotImplementedException();
-            receivedText += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
+            //receivedText += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
+            //robot.receivedText += Encoding.UTF8.GetString(e.Data, 0, e.Data.Length);
             
+
+            foreach (byte c in e.Data)
+            {
+                robot.byteListReceived.Enqueue(c);
+            }
         }
 
-        
+
 
         void envoyer()
         {
-            serialPort1.Write(textBoxEmission.Text);            
+            serialPort1.Write(textBoxEmission.Text);
             textBoxEmission.Clear();
         }
 
         private void buttonEnvoyer_Click(object sender, RoutedEventArgs e)
         {
             buttonEnvoyer.Background = Brushes.RoyalBlue;
-            if(buttonEnvoyer.Background == Brushes.RoyalBlue)
+            if (buttonEnvoyer.Background == Brushes.RoyalBlue)
             {
                 buttonEnvoyer.Background = Brushes.Beige;
             }
 
-            else 
-            { 
-                buttonEnvoyer.Background = Brushes.RoyalBlue; 
+            else
+            {
+                buttonEnvoyer.Background = Brushes.RoyalBlue;
             }
 
-            envoyer(); 
-            
+            envoyer();
+
         }
 
         private void textBoxEmission_KeyUp(object sender, KeyEventArgs e)
         {
-            if(e.Key == Key.Enter )
-{
+            if (e.Key == Key.Enter)
+            {
                 envoyer();
             }
         }
@@ -101,5 +108,18 @@ namespace RobotInterface
         {
             textBoxReception.Clear();
         }
+
+        private void buttonTest_Click(object sender, RoutedEventArgs e)
+        {
+            byte[] byteList = new byte[20];
+            for (int i = 0; i < 20; i++)
+            {
+                byteList[i] = (byte)(2 * i);
+            }
+            serialPort1.Write(byteList, 0, byteList.Length);
+            textBoxEmission.Clear();
+
+        }
     }
+   
 }
