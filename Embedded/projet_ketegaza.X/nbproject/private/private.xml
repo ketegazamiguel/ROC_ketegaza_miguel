@@ -6,6 +6,10 @@
             <file>file:/C:/GitHub/ROC_ketegaza_miguel/Embedded/projet_ketegaza.X/main.h</file>
             <file>file:/C:/GitHub/ROC_ketegaza_miguel/Embedded/projet_ketegaza.X/ADC.c</file>
             <file>file:/C:/GitHub/ROC_ketegaza_miguel/Embedded/projet_ketegaza.X/main.c</file>
+            <file>file:/C:/GitHub/ROC_ketegaza_miguel/Embedded/projet_ketegaza.X/UART.c</file>
+            <file>file:/C:/GitHub/ROC_ketegaza_miguel/Embedded/projet_ketegaza.X/IO.c</file>
+            <file>file:/C:/GitHub/ROC_ketegaza_miguel/Embedded/projet_ketegaza.X/UART.h</file>
+            <file>file:/C:/GitHub/ROC_ketegaza_miguel/Embedded/projet_ketegaza.X/PWM.c</file>
         </group>
     </open-files>
 </project-private>

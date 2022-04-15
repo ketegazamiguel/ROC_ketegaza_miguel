@@ -8,6 +8,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <xc.h>
+#include <libpic30.h>
 #include "ChipConfig.h"
 #include "IO.h"
 #include "timer.h"
@@ -96,6 +97,8 @@ int main(void) {
             
 //            
        }
+        //SendMessageDirect((unsigned char*)"Bonjour",7); 
+       // __delay32(40000000); 
     }
 }
 //

@@ -43,7 +43,7 @@ void InitIO()
     
     
     
-    _U1RXR = 0; //Remappe l a RP36 s u r l ?é e n t r e Rx1
+    _U1RXR = 24; //Remappe l a RP36 su  l entré Rx1
     _RP36R = 0b00001 ; //Remappe la sortie Tx1 vers RP36
 
     
